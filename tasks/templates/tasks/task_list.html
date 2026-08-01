@@ -1,0 +1,51 @@
+{% extends 'tasks/base.html' %}
+
+{% block content %}
+<div class="task-header">
+    <h2>Mis Tareas</h2>
+    <a href="{% url 'task_create' %}" class="btn btn-primary">Nueva Tarea</a>
+</div>
+
+<div class="filters-search-bar">
+    <div class="filters">
+        <a href="{% url 'task_list' %}?filter=all" class="filter-link {% if filter_by == 'all' %}active{% endif %}">Todas</a>
+        <a href="{% url 'task_list' %}?filter=pending" class="filter-link {% if filter_by == 'pending' %}active{% endif %}">Pendientes</a>
+        <a href="{% url 'task_list' %}?filter=completed" class="filter-link {% if filter_by == 'completed' %}active{% endif %}">Completadas</a>
+    </div>
+    
+    <form class="search-form" method="get" action="{% url 'task_list' %}">
+        {% if filter_by %}
+            <input type="hidden" name="filter" value="{{ filter_by }}">
+        {% endif %}
+        <input type="text" name="q" placeholder="Buscar tareas..." value="{{ search_query }}">
+        <button type="submit" class="btn">Buscar</button>
+    </form>
+</div>
+
+<div class="task-list">
+    {% for task in tasks %}
+        <div class="task-item {% if task.completed %}completed-task{% endif %}">
+            <div class="task-content">
+                <h3 class="task-title">
+                    <a href="{% url 'task_toggle' task.pk %}" class="toggle-link">
+                        {% if task.completed %}✅{% else %}⬜{% endif %}
+                    </a>
+                    <span class="{% if task.completed %}strike-through{% endif %}">{{ task.title }}</span>
+                </h3>
+                {% if task.description %}
+                    <p class="task-desc {% if task.completed %}strike-through{% endif %}">{{ task.description }}</p>
+                {% endif %}
+                <small class="task-date">Creada: {{ task.created_at|date:"d/m/Y H:i" }}</small>
+            </div>
+            <div class="task-actions">
+                <a href="{% url 'task_update' task.pk %}" class="btn btn-small">Editar</a>
+                <a href="{% url 'task_delete' task.pk %}" class="btn btn-small btn-danger">Eliminar</a>
+            </div>
+        </div>
+    {% empty %}
+        <div class="empty-state">
+            <p>No tienes tareas que coincidan con la búsqueda o filtro.</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

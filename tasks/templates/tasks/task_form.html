@@ -1,0 +1,15 @@
+{% extends 'tasks/base.html' %}
+
+{% block content %}
+<div class="form-card">
+    <h2>{% if task %}Editar Tarea{% else %}Crear Tarea{% endif %}</h2>
+    <form method="post" class="standard-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a href="{% url 'task_list' %}" class="btn btn-outline">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

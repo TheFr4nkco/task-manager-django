@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'tasks/style.css' %}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container nav-content">
+            <h1 class="logo"><a href="{% url 'task_list' %}">Gestor de Tareas</a></h1>
+            <nav class="nav-links">
+                {% if user.is_authenticated %}
+                    <span class="user-greeting">Hola, {{ user.username }}</span>
+                    <a href="{% url 'logout' %}" class="btn btn-outline">Salir</a>
+                {% else %}
+                    <a href="{% url 'login' %}">Entrar</a>
+                    <a href="{% url 'register' %}" class="btn">Registro</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>
